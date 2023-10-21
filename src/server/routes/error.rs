@@ -1,6 +1,9 @@
 use super::*;
+use crate::utils::*;
 
 #[handler]
+// #[tracing::instrument(skip(_req, _depot, ctrl), fields(body = res.as_serde()))]
+#[tracing::instrument(skip(_req, _depot, ctrl))]
 pub(super) async fn handle_error(
     &self,
     _req: &Request,
@@ -10,15 +13,16 @@ pub(super) async fn handle_error(
 ) {
     let status = res.status_code.unwrap_or_default();
     let content = match status {
-        StatusCode::BAD_REQUEST => "invalid parameter is set",
-        StatusCode::INTERNAL_SERVER_ERROR => "internal error occurred",
-        s if s.is_client_error() => "4xx error occurred",
-        s if s.is_server_error() => "5xx error occurred",
-        _ => "something went wrong",
+        StatusCode::BAD_REQUEST => warn_msg("invalid parameter is set"),
+        StatusCode::INTERNAL_SERVER_ERROR => warn_msg("internal error occurred"),
+        s if s.is_client_error() => warn_msg("4xx error occurred"),
+        s if s.is_server_error() => err_msg("5xx error occurred"),
+        s if s.is_informational() || s.is_success() || s.is_redirection() => String::default(),
+        _ => err_msg("something went wrong"),
     };
-    let response = ResponseClipboard {
+    let response = ResponseCommon {
         status: status.as_u16(),
-        content,
+        content: &content,
     };
 
     if status.is_client_error() || status.is_server_error() {
