@@ -93,7 +93,7 @@ impl Client {
 
         let mut url = self.base_url.to_owned();
 
-        url.set_port(Some(self.port));
+        let _ = url.set_port(Some(self.port));
 
         if let Ok(mut url_segment) = url.path_segments_mut() {
             url_segment.pop_if_empty().extend(endpoint_strs);

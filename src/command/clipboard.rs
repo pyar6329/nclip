@@ -1,6 +1,7 @@
 use super::*;
 use crate::client::*;
 use crate::config::Port;
+use std::borrow::Cow;
 use tokio::sync::oneshot;
 
 const TIMEOUT: u8 = 5;
@@ -20,14 +21,17 @@ impl Clipboard {
         Ok(content?)
     }
 
-    pub async fn copy(port: &Port) -> Result<(), Error> {
+    pub async fn copy<T>(port: &Port, content: T) -> Result<(), Error>
+    where
+        T: Into<String>,
+    {
         let client = Self::create_client(port)?;
+        let s = content.into();
         println!("copy client aaaaaaaaa");
-        let content = "hfosadhfushfuasdfjhoiaj";
         let (tx, rx) = oneshot::channel();
         tokio::spawn(async move {
             // println!("copy client was called");
-            let maybe_content = ClipboardClient::post(&client, &content).await;
+            let maybe_content = ClipboardClient::post(&client, &s).await;
             let _ = tx.send(maybe_content);
         });
         println!("copy client ggggggggggggg");

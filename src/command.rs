@@ -19,7 +19,8 @@ pub async fn run() {
 
     if mode.is_copy_command() {
         println!("--copy is start! port: {}", &port);
-        let result = Clipboard::copy(&port).await;
+        let content = get_stdin().await;
+        let result = Clipboard::copy(&port, &content).await;
         if result.is_ok() {
             process::exit(0)
         } else {
@@ -30,7 +31,7 @@ pub async fn run() {
     if mode.is_paste_command() {
         let result = Clipboard::paste(&port).await;
         if let Ok(content) = result {
-            print!("{}", content);
+            post_stdout(&content).await;
             process::exit(0)
         } else {
             process::exit(1)
@@ -38,6 +39,11 @@ pub async fn run() {
     }
 }
 
-pub async fn get_stdin() {}
+pub async fn get_stdin() -> String {
+    "hello".to_string()
+}
 
-pub async fn post_stdout() {}
+pub async fn post_stdout(s: &str) {
+    // TODO: print!ではなく、tokioでBufWriteでやる
+    print!("{}", s);
+}
