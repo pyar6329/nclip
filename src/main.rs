@@ -1,7 +1,8 @@
-use arboard::Clipboard;
+// extern crate openssl;
+
+use anyhow::Result;
+use nclip::server;
 
 fn main() {
-    let mut clipboard = Clipboard::new().unwrap();
-
-    println!("Clipboard text was: {}", clipboard.get_text().unwrap());
+    server::run()
 }

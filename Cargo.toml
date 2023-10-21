@@ -11,7 +11,13 @@ doctest = false
 thiserror = "1.0"
 anyhow = "1.0"
 strum = { version = "0.25", features = ["derive"] }
-tokio = { version = "1", features = ["full"] }
+# tokio = { version = "1", features = ["full"] }
+tokio = { version = "1", features = ["macros", "signal"] }
+salvo = { version = "0.58", features = ["quinn"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["json"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
 # reqwest = { version = "0.11", default-features = false, features = ["rustls-tls", "json", "multipart", "stream"] }
 # reqwest-middleware = "0.2"
 # reqwest-retry = "0.2"
