@@ -2,22 +2,21 @@ mod init;
 mod requests;
 mod routes;
 
+use super::command::Port;
 use init::*;
 use routes::*;
 use salvo::Server;
 use tokio::sync::oneshot;
-// use tracing::info;
 
 #[tokio::main]
-pub async fn run() {
+pub async fn run(port: &Port) {
     init_tracing();
 
     let router = create_router();
     let service = create_service(router);
-    let port = 5800;
 
     // http3_server(&port, router).await;
-    let acceptor = http1_server(&port).await;
+    let acceptor = http1_server(port).await;
 
     let (tx, rx) = oneshot::channel();
     let server = Server::new(acceptor).serve_with_graceful_shutdown(
