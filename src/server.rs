@@ -2,13 +2,12 @@ mod init;
 mod requests;
 mod routes;
 
-use super::command::Port;
+use crate::config::Port;
 use init::*;
 use routes::*;
 use salvo::Server;
 use tokio::sync::oneshot;
 
-#[tokio::main]
 pub async fn run(port: &Port) {
     init_tracing();
 

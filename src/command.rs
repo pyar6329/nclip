@@ -1,47 +1,43 @@
-use clap::Parser;
-use strum::EnumIs;
-use Mode::*;
+mod arg;
+mod clipboard;
 
-pub type Port = u16;
-// const DEFAULT_PORT: Port = 2230;
-const DEFAULT_PORT: Port = 5800;
+use crate::server;
+use anyhow::{anyhow, Error, Result};
+pub use arg::*;
+pub use clipboard::*;
+use std::process;
+use url::Url;
 
-#[derive(Parser, Debug)]
-#[command(author, version, about, long_about = None)]
-pub struct Arg {
-    #[arg(short, long, help = "copy from stdin")]
-    pub copy: bool,
-    #[arg(short, long, default_value_t = DEFAULT_PORT, help = "running port")]
-    pub port: Port,
-    #[arg(short, long, help = "running server")]
-    pub server: bool,
-}
+pub async fn run() {
+    let mode = Arg::get();
 
-impl Arg {
-    pub fn get() -> Mode {
-        let args = Arg::parse();
-        if args.server {
-            return ServerCommand(args.port);
+    let port = mode.get_port();
+
+    if mode.is_server_command() {
+        server::run(&port).await
+    }
+
+    if mode.is_copy_command() {
+        println!("--copy is start! port: {}", &port);
+        let result = Clipboard::copy(&port).await;
+        if result.is_ok() {
+            process::exit(0)
+        } else {
+            process::exit(1)
         }
-        if args.copy {
-            return CopyCommand;
+    }
+
+    if mode.is_paste_command() {
+        let result = Clipboard::paste(&port).await;
+        if let Ok(content) = result {
+            print!("{}", content);
+            process::exit(0)
+        } else {
+            process::exit(1)
         }
-        PasteCommand
     }
 }
 
-#[derive(Copy, Clone, Debug, PartialEq, Eq, EnumIs)]
-pub enum Mode {
-    ServerCommand(Port),
-    CopyCommand,
-    PasteCommand,
-}
+pub async fn get_stdin() {}
 
-impl Mode {
-    pub fn get_port(&self) -> Port {
-        match *self {
-            ServerCommand(port) => port,
-            _ => DEFAULT_PORT,
-        }
-    }
-}
+pub async fn post_stdout() {}
