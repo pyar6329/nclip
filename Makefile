@@ -44,3 +44,4 @@ format: ## run: cargo clippy && cargo fmt
 .PHONY:	clean
 clean: ## run: cargo clean
 	@cargo clean
+	@rm -rf dist

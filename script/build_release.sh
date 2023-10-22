@@ -20,7 +20,15 @@ rustup target add x86_64-unknown-linux-musl
 rustup target add aarch64-apple-darwin
 
 cargo build --locked --release --target x86_64-unknown-linux-musl
-tar -I "pzstd -19" -cvf nclip-Linux-x86_64.tar.zst target/x86_64-unknown-linux-musl/release/nclip
+rm -rf ./nclip
+cp target/x86_64-unknown-linux-musl/release/nclip ./nclip
+tar -I "pzstd -19" -cvf nclip-Linux-x86_64.tar.zst nclip
 
 cargo build --locked --release --target aarch64-apple-darwin
-tar -I "pzstd -19" -cvf nclip-Darwin-arm64.tar.zst target/aarch64-apple-darwin/release/nclip
+rm -rf ./nclip
+cp target/aarch64-apple-darwin/release/nclip ./nclip
+tar -I "pzstd -19" -cvf nclip-Darwin-arm64.tar.zst nclip
+rm -rf ./nclip
+
+mkdir -p dist
+mv *.zst dist/
