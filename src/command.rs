@@ -31,7 +31,8 @@ pub async fn run() {
         }
         PasteCommand(port) => {
             let result = Clipboard::paste(&port).await;
-            if let Ok(content) = result {
+            if let Ok(compressed_content) = result {
+                let content = compressed_content.decode().unwrap_or_default();
                 post_stdout(&content).await;
                 process::exit(0)
             } else {

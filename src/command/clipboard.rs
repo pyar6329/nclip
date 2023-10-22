@@ -9,7 +9,7 @@ const RETRY: u8 = 15;
 pub struct Clipboard;
 
 impl Clipboard {
-    pub async fn paste(port: &Port) -> Result<String, Error> {
+    pub async fn paste(port: &Port) -> Result<Zstd, Error> {
         let client = Self::create_client(port)?;
         let (tx, rx) = oneshot::channel();
         tokio::spawn(async move {
@@ -17,7 +17,8 @@ impl Clipboard {
             let _ = tx.send(maybe_content);
         });
 
-        rx.await?
+        let content = rx.await??;
+        Ok(Zstd::from(&content))
     }
 
     pub async fn copy(port: &Port, compressed_content: &Zstd) -> Result<(), Error> {

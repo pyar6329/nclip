@@ -33,7 +33,8 @@ pub(super) async fn post_clipboard<'a>(
     ctrl.skip_rest(); // skip middleware
     info!("POST /clipboards was called");
 
-    Clipboard::set_clipboard(body.content).map_err(|e| {
+    let compressed_content = Zstd::from(body.content);
+    Clipboard::set_clipboard(&compressed_content).map_err(|e| {
         err_msg(e.to_string());
         PostClipboardError
     })?;

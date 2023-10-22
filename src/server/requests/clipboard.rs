@@ -32,26 +32,24 @@ pub struct ResponseClipboard<'a> {
 pub struct Clipboard;
 
 impl Clipboard {
-    pub fn get_clipboard() -> Result<String, Error> {
+    pub fn get_clipboard() -> Result<Zstd, Error> {
         let mut client = Arboard::new().map_err(|e| {
             err_msg(e.to_string());
             CannotCreateClipboardInstance
         })?;
 
-        let data: String = client.get_text().map_err(|e| {
+        let content: String = client.get_text().map_err(|e| {
             err_msg(e.to_string());
             CannotGetClipboardString
         })?;
 
-        Ok(data)
+        let compressed_content = Zstd::encode(&content);
+
+        Ok(compressed_content)
     }
 
-    pub fn set_clipboard<S>(s: S) -> Result<(), Error>
-    where
-        S: AsRef<str>,
-    {
-        let compressed_content = s.as_ref();
-        let content = Zstd::from(compressed_content).decode()?;
+    pub fn set_clipboard(compressed_content: &Zstd) -> Result<(), Error> {
+        let content = compressed_content.decode()?;
         let mut clipboard = Arboard::new().map_err(|e| {
             err_msg(e.to_string());
             CannotCreateClipboardInstance
