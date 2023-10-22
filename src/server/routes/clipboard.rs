@@ -4,12 +4,14 @@ use anyhow::Result;
 
 #[handler]
 pub(super) async fn get_clipboard(
+    _req: &mut Request,
     res: &mut Response,
     ctrl: &mut FlowCtrl,
 ) -> Result<(), GetClipboardError> {
     ctrl.skip_rest(); // skip middleware
     info!("GET /clipboards was called");
 
+    // _req.payload_with_max_size(120).await;
     let content = Clipboard::get_clipboard().map_err(|e| {
         err_msg(e.to_string());
         GetClipboardError
@@ -19,6 +21,7 @@ pub(super) async fn get_clipboard(
         status: StatusCode::OK.as_u16(),
         content: &content,
     };
+
     res.render(Json(response));
 
     Ok(())

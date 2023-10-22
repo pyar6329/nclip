@@ -8,7 +8,7 @@ pub use arg::Mode::*;
 pub use arg::*;
 pub use clipboard::*;
 use std::process;
-use tokio::io::{self, AsyncReadExt, AsyncWriteExt};
+use tokio::io::{self, AsyncReadExt};
 use url::Url;
 
 pub async fn run() {
@@ -33,7 +33,7 @@ pub async fn run() {
             let result = Clipboard::paste(&port).await;
             if let Ok(compressed_content) = result {
                 let content = compressed_content.decode().unwrap_or_default();
-                post_stdout(&content).await;
+                post_stdout(&content);
                 process::exit(0)
             } else {
                 process::exit(1)
@@ -51,7 +51,6 @@ pub async fn get_stdin() -> String {
     context
 }
 
-pub async fn post_stdout(s: &str) {
-    let mut stdout = io::stdout();
-    let _ = stdout.write_all(s.as_bytes()).await;
+pub fn post_stdout(s: &str) {
+    print!("{}", s);
 }
