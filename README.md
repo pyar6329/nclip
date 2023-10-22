@@ -52,8 +52,21 @@ $ echo "hello" | nclip --copy
 
 or
 
+
 ```bash
-$ nclip --copy < "hello"
+$ echo "hello" | nclip
+```
+
+or
+
+```bash
+$ nclip --copy < README.md
+```
+
+or
+
+```bash
+$ nclip < README.md
 ```
 
 # NeoVim Configure
