@@ -12,7 +12,7 @@ thiserror = "1.0"
 anyhow = "1.0"
 strum = { version = "0.25", features = ["derive"] }
 # tokio = { version = "1", features = ["full"] }
-tokio = { version = "1", features = ["macros", "signal"] }
+tokio = { version = "1", features = ["macros", "signal", "io-std"] }
 salvo = { version = "0.58", features = ["quinn"] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["json"] }
@@ -26,7 +26,8 @@ reqwest-middleware = "0.2"
 reqwest-retry = "0.3"
 reqwest-tracing = "0.4"
 url = "2.4"
-# url = "2.3"
+zstd = "0.13"
+base64 = "0.21"
 arboard = "3.2"
 clap = { version = "4.4", features = ["derive"] }
 # itertools = "0.11"
