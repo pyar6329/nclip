@@ -16,8 +16,8 @@ impl Clipboard {
             let maybe_content = ClipboardClient::get(&client).await;
             let _ = tx.send(maybe_content);
         });
-        let content = rx.await?;
-        Ok(content?)
+
+        rx.await?
     }
 
     pub async fn copy(port: &Port, compressed_content: &Zstd) -> Result<(), Error> {

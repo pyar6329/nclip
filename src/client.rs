@@ -1,15 +1,13 @@
 mod clipboard;
 use crate::config::Port;
-use anyhow::{anyhow, bail, Error, Result};
+use anyhow::{Error, Result};
 pub use clipboard::*;
-use reqwest::{
-    header, Body, Client as ReqwestClient, Error as ReqwestError, Method as HTTPMethod, StatusCode,
-};
+use reqwest::{Client as ReqwestClient, Error as ReqwestError, Method as HTTPMethod, StatusCode};
 use reqwest_middleware::{ClientBuilder, ClientWithMiddleware, Error as ReqwestMiddlewareError};
 use reqwest_retry::{policies::ExponentialBackoff, RetryTransientMiddleware};
 use reqwest_tracing::TracingMiddleware;
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use std::time::Duration;
 use strum::EnumIs;
 use thiserror::Error as ThisError;
@@ -158,6 +156,6 @@ impl From<ReqwestMiddlewareError> for ClientError {
         if let ReqwestMiddlewareError::Middleware(_) = err {
             return ReqwestMiddlewareError;
         }
-        return UnknownError;
+        UnknownError
     }
 }

@@ -33,14 +33,14 @@ pub(super) async fn post_clipboard<'a>(
     ctrl.skip_rest(); // skip middleware
     info!("POST /clipboards was called");
 
-    let _ = Clipboard::set_clipboard(&body.content).map_err(|e| {
+    Clipboard::set_clipboard(body.content).map_err(|e| {
         err_msg(e.to_string());
         PostClipboardError
     })?;
 
     let response = ResponseClipboard {
         status: StatusCode::CREATED.as_u16(),
-        content: &body.content,
+        content: body.content,
     };
     res.render(Json(response));
 

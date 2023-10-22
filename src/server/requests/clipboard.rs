@@ -57,7 +57,7 @@ impl Clipboard {
             CannotCreateClipboardInstance
         })?;
 
-        let _ = clipboard.set_text(content).map_err(|e| {
+        clipboard.set_text(content).map_err(|e| {
             err_msg(e.to_string());
             CannotSetClipboardString
         })?;
