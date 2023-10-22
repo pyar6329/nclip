@@ -22,7 +22,8 @@ update_cargo: ## build application
 
 .PHONY:	release
 release: ## build static linked binary as release using Docker
-	@./script/build_release.sh
+	@cargo build --locked --release
+	@cargo build --locked --release --target x86_64-unknown-linux-mus
 
 .PHONY:	run
 run: ## run: cargo run
