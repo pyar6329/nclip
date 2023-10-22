@@ -1,5 +1,11 @@
-# nclip-rs
-replace nclip (https://github.com/pyar6329/nclip) by Rust
+# nclip
+
+Clipboard share remote and local.
+
+required: SSH remote port forwarding
+
+replace nclip (https://github.com/pyar6329/nclip-legacy) by Rust
+
 
 # Installation
 
