@@ -10,7 +10,7 @@ replace nclip (https://github.com/pyar6329/nclip-legacy) by Rust
 # Installation
 
 ```bash
-$ curl -o nclip.tar.zst "https://github.com/pyar6329/nclip-rs/releases/download/1.0.0/nclip-$(uname -s)-$(uname -m).tar.zst"
+$ curl -sL -o nclip.tar.zst https://github.com/pyar6329/nclip/releases/latest/download/nclip-$(uname -s)-$(uname -m).tar.zst
 $ tar -I pzstd -xvf nclip.tar.zst
 $ sudo mv nclip /usr/local/bin/nclip
 $ sudo chmod +x /usr/local/bin/nclip
