@@ -33,13 +33,3 @@ pub enum Mode {
     CopyCommand(Port),
     PasteCommand(Port),
 }
-
-impl Mode {
-    pub fn get_port(&self) -> Port {
-        match *self {
-            ServerCommand(port) => port,
-            CopyCommand(port) => port,
-            PasteCommand(port) => port,
-        }
-    }
-}

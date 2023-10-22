@@ -50,13 +50,14 @@ impl Clipboard {
     where
         S: AsRef<str>,
     {
-        let text = s.as_ref();
+        let compressed_content = s.as_ref();
+        let content = Zstd::from(compressed_content).decode()?;
         let mut clipboard = Arboard::new().map_err(|e| {
             err_msg(e.to_string());
             CannotCreateClipboardInstance
         })?;
 
-        let _ = clipboard.set_text(text).map_err(|e| {
+        let _ = clipboard.set_text(content).map_err(|e| {
             err_msg(e.to_string());
             CannotSetClipboardString
         })?;

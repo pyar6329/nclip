@@ -36,7 +36,6 @@ impl ClipboardClient {
         let _: PostResponseBody = client
             .execute(HTTPMethod::POST, "/clipboards", &request_body)
             .await?;
-
         Ok(())
     }
 }
