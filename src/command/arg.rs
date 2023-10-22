@@ -1,4 +1,5 @@
 use crate::config::{Port, DEFAULT_PORT};
+use atty::Stream::Stdin;
 use clap::Parser;
 use strum::EnumIs;
 use Mode::*;
@@ -23,7 +24,10 @@ impl Arg {
         if args.copy {
             return CopyCommand(args.port);
         }
-        PasteCommand(args.port)
+        if atty::is(Stdin) {
+            return PasteCommand(args.port);
+        }
+        CopyCommand(args.port)
     }
 }
 
