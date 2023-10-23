@@ -46,9 +46,8 @@ pub async fn get_stdin() -> String {
     let mut stdin = io::stdin();
     let mut buffer = vec![];
     let _ = stdin.read_to_end(&mut buffer).await;
-    let mut context = String::from_utf8(buffer).ok().unwrap_or_default();
-    context.pop(); // remove last new line character ('\n')
-    context
+    let context = String::from_utf8(buffer).ok().unwrap_or_default();
+    context.trim_end_matches('\n').to_string() // remove last new line character ('\n')
 }
 
 pub fn post_stdout(s: &str) {
