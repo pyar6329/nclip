@@ -35,7 +35,7 @@ required: SSH remote port forwarding
 ## run server
 
 ```bash
-$ nclip --server
+$ nclip -s
 ```
 
 ## paste text from clipboard
@@ -47,26 +47,13 @@ $ nclip
 ## copy text to clipboard
 
 ```bash
-$ echo "hello" | nclip --copy
-```
-
-or
-
-
-```bash
-$ echo "hello" | nclip
+$ echo "hello" | nclip -c
 ```
 
 or
 
 ```bash
-$ nclip --copy < README.md
-```
-
-or
-
-```bash
-$ nclip < README.md
+$ nclip -c < README.md
 ```
 
 # NeoVim Configure
@@ -76,8 +63,8 @@ set clipboard+=unnamedplus
 let g:clipboard = {
 \   'name': 'nclip',
 \   'copy': {
-\      '+': 'nclip --copy',
-\      '*': 'nclip --copy',
+\      '+': 'nclip -c',
+\      '*': 'nclip -c',
 \    },
 \   'paste': {
 \      '+': 'nclip',
